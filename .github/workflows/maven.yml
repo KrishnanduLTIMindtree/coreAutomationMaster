@@ -36,3 +36,6 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: KrishnanduLTIMindtree/secondProject
           event-type: trigger-workflow02
+          client-payload: '{"TEST_ENV": "QA"}'
+        
+          
