@@ -14,9 +14,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -27,3 +25,14 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn test
+      
+  trigger-workflow02:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow02
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: KrishnanduLTIMindtree/secondProject
+          event-type: trigger-workflow02
