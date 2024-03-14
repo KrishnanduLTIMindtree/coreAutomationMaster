@@ -37,5 +37,16 @@ jobs:
           repository: KrishnanduLTIMindtree/secondProject
           event-type: trigger-workflow02
           client-payload: '{"TEST_ENV": "QA"}'
+
+  trigger-watch:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow02
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: KrishnanduLTIMindtree/secondProject
+          event-type: started
         
           
