@@ -37,6 +37,6 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: KrishnanduLTIMindtree/secondProject
           event-type: trigger-workflow02
-          client-payload: '{"TEST_ENV": "QA","CALL_RUN_ID": ${{github.run_id}},"CALL_RUN_NO": ${{github.run_number}},"CALL_WORKFLOW": ${{github.workflow}}}'
+          client-payload: '{"TEST_ENV": "QA","CALL_RUN_ID": ${{github.run_id}},"CALL_RUN_NO": ${{github.run_number}},"CALL_WORKFLOW": "${{github.workflow}}"}'
         
           
