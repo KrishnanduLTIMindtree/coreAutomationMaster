@@ -1,0 +1,72 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# new
+
+name: TestResult
+on:
+  workflow_dispatch:
+    inputs:
+     DEV_RUN_ID:
+      description: 'DEV run id'
+      required: false
+     DEV_RUN_NO:
+      description: 'DEV run Number'
+      required: false
+     DEV_WORKFLOW:
+      description: 'DEV work flow name'
+      required: false
+     TEST_RUN_ID:
+      description: 'DEV run id'
+      required: false
+     TEST_RUN_NO:
+      description: 'DEV run Number'
+      required: false
+     TEST_WORKFLOW:
+      description: 'DEV work flow name'
+      required: false
+  repository_dispatch: 
+    types:
+      - test-result
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Failed Condition repository_dispatch
+      if: ${{failure() && contains(fromJSON('["repository_dispatch"]'), github.event_name)}}
+      run: |
+          echo "failed condtion running"
+          echo "DEV_RUN_ID :: " ${{github.event.client_payload.DEV_RUN_ID}}
+          echo "DEV_RUN_NO :: "${{github.event.client_payload.DEV_RUN_NO}}
+          echo "DEV_WORKFLOW :: "${{github.event.client_payload.DEV_WORKFLOW}}
+          echo "TEST_RUN_ID :: "${{github.event.client_payload.TEST_RUN_ID}}
+          echo "TEST_RUN_NO :: "${{github.event.client_payload.TEST_RUN_NO}}
+          echo "TEST_WORKFLOW :: "${{github.event.client_payload.TEST_WORKFLOW}}
+          echo $TEST_ENV
+          echo ${{github.run_id}}
+          echo ${{github.run_number}}
+          echo ${{github.workflow}}
+          echo ${{github.event_name}}
+          echo ${{job.status}}
+    - name: Success Condtion repository_dispatch
+      if: ${{success() && contains(fromJSON('["repository_dispatch"]'), github.event_name)}}
+      run: |
+          echo "success condtion running"
+          echo "DEV_RUN_ID :: " ${{github.event.client_payload.DEV_RUN_ID}}
+          echo "DEV_RUN_NO :: "${{github.event.client_payload.DEV_RUN_NO}}
+          echo "DEV_WORKFLOW :: "${{github.event.client_payload.DEV_WORKFLOW}}
+          echo "TEST_RUN_ID :: "${{github.event.client_payload.TEST_RUN_ID}}
+          echo "TEST_RUN_NO :: "${{github.event.client_payload.TEST_RUN_NO}}
+          echo "TEST_WORKFLOW :: "${{github.event.client_payload.TEST_WORKFLOW}}
+          echo $TEST_ENV
+          echo ${{github.run_id}}
+          echo ${{github.run_number}}
+          echo ${{github.workflow}}
+          echo ${{github.event_name}}
+          echo ${{job.status}}
