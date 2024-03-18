@@ -21,14 +21,17 @@ on:
       description: 'DEV work flow name'
       required: false
      TEST_RUN_ID:
-      description: 'DEV run id'
+      description: 'TEST_RUN_ID run id'
       required: false
      TEST_RUN_NO:
-      description: 'DEV run Number'
+      description: 'TEST_RUN_NO run Number'
       required: false
      TEST_WORKFLOW:
-      description: 'DEV work flow name'
+      description: 'TEST_WORKFLOW name'
       required: false
+     TEST_RESULT:
+      description: 'test-result '
+      required: false     
   repository_dispatch: 
     types:
       - test-result
@@ -39,7 +42,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Failed Condition repository_dispatch
-      if: ${{failure() && contains(fromJSON('["repository_dispatch"]'), github.event_name)}}
+      if: ${{contains(fromJSON('["repository_dispatch"]'), github.event_name) && contains(fromJSON('["FAIL"]'), github.event.client_payload.TEST_RESULT) }}
       run: |
           echo "failed condtion running"
           echo "DEV_RUN_ID :: " ${{github.event.client_payload.DEV_RUN_ID}}
@@ -48,6 +51,7 @@ jobs:
           echo "TEST_RUN_ID :: "${{github.event.client_payload.TEST_RUN_ID}}
           echo "TEST_RUN_NO :: "${{github.event.client_payload.TEST_RUN_NO}}
           echo "TEST_WORKFLOW :: "${{github.event.client_payload.TEST_WORKFLOW}}
+          echo "TEST_RESULT :: "${{github.event.client_payload.TEST_RESULT}}
           echo $TEST_ENV
           echo ${{github.run_id}}
           echo ${{github.run_number}}
@@ -55,7 +59,7 @@ jobs:
           echo ${{github.event_name}}
           echo ${{job.status}}
     - name: Success Condtion repository_dispatch
-      if: ${{success() && contains(fromJSON('["repository_dispatch"]'), github.event_name)}}
+      if: ${{contains(fromJSON('["repository_dispatch"]'), github.event_name) && contains(fromJSON('["PASS"]'), github.event.client_payload.TEST_RESULT) }}
       run: |
           echo "success condtion running"
           echo "DEV_RUN_ID :: " ${{github.event.client_payload.DEV_RUN_ID}}
@@ -64,6 +68,7 @@ jobs:
           echo "TEST_RUN_ID :: "${{github.event.client_payload.TEST_RUN_ID}}
           echo "TEST_RUN_NO :: "${{github.event.client_payload.TEST_RUN_NO}}
           echo "TEST_WORKFLOW :: "${{github.event.client_payload.TEST_WORKFLOW}}
+          echo "TEST_RESULT :: "${{github.event.client_payload.TEST_RESULT}}
           echo $TEST_ENV
           echo ${{github.run_id}}
           echo ${{github.run_number}}
